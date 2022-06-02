@@ -100,8 +100,8 @@ cargarPregunta();
 
  const btnFinalizar  = document.createElement("button");
  const btnReiniciar  = document.createElement("button");
- btnFinalizar.classList.add('btn','btn-outline-danger');
- btnReiniciar.classList.add('btn','btn-outline-warning','btnReiniciar');
+ btnFinalizar.classList.add('btn','btn-outline-danger','btnPuntaje');
+ btnReiniciar.classList.add('btn','btn-outline-warning','btnReiniciar','btnPuntaje');
  btnFinalizar.textContent = 'Finalizar Juego';
  btnReiniciar.textContent = 'Retirar Juego';
  
@@ -123,6 +123,10 @@ cargarPregunta();
   const txtSubTitle  = document.createElement("h2");
   const txtHistorial  = document.createElement("h3");
   txtSubTitle.textContent = "HISTORIAL JUGADORES!!";
+
+  localStorage.getItem(localStorage.getItem('user')) === null 
+    ? localStorage.setItem(localStorage.getItem('user'),'0'):
+
   txtHistorial.textContent = localStorage.getItem('user') + ' : ' + localStorage.getItem(localStorage.getItem('user')) ;
 
   tbHistorialContainer.append(txtSubTitle,txtHistorial);
