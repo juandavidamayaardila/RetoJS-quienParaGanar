@@ -76,6 +76,7 @@ divPregunta.append(divMainRespuestas)
 
 container.appendChild(divRow);
 
+
 cargarPregunta();
 
 /**
@@ -102,7 +103,7 @@ cargarPregunta();
  btnFinalizar.classList.add('btn','btn-outline-danger');
  btnReiniciar.classList.add('btn','btn-outline-warning','btnReiniciar');
  btnFinalizar.textContent = 'Finalizar Juego';
- btnReiniciar.textContent = 'Reiniciar Juego';
+ btnReiniciar.textContent = 'Retirar Juego';
  
  divMainPuntajeHead.append(iUsuario);
  divMainPuntajeHead.append(SpanUser);
@@ -114,28 +115,82 @@ cargarPregunta();
  divRow.append(divPuntuacion);
  
 
+ /**
+  * Creamos el html necesario para mostrar una tabla con los jugadores
+  * recientes usamos otro contenedor.
+  */
+  const tbHistorialContainer = document.querySelector("#tbHistorial");
+  const txtSubTitle  = document.createElement("h2");
+  const txtHistorial  = document.createElement("h3");
+  txtSubTitle.textContent = "HISTORIAL JUGADORES!!";
+  txtHistorial.textContent = localStorage.getItem('user') + ' : ' + localStorage.getItem(localStorage.getItem('user')) ;
 
+  tbHistorialContainer.append(txtSubTitle,txtHistorial);
+
+ function cargarRespuestasTmp(index){
+    const indexRespuesta = Math.floor(Math.random()* (4  + 1));
+    switch (indexRespuesta){
+        case 1:
+            txtPregunta.textContent = data[index].pregunta;
+            btnOpcionA.textContent = data[index].respuestaFalse2;
+            btnOpcionB.textContent = data[index].respuestaTrue;
+            btnOpcionC.textContent = data[index].respuestaFalse3;
+            btnOpcionD.textContent = data[index].respuestaFalse1;
+            break;
+        case 2:
+            txtPregunta.textContent = data[index].pregunta;
+            btnOpcionA.textContent = data[index].respuestaFalse2;
+            btnOpcionB.textContent = data[index].respuestaFalse1;
+            btnOpcionC.textContent = data[index].respuestaFalse3;
+            btnOpcionD.textContent = data[index].respuestaTrue;
+            break; 
+        case 3:
+            txtPregunta.textContent = data[index].pregunta;
+            btnOpcionA.textContent = data[index].respuestaTrue;
+            btnOpcionB.textContent = data[index].respuestaFalse1;
+            btnOpcionC.textContent = data[index].respuestaFalse2;
+            btnOpcionD.textContent = data[index].respuestaFalse3;
+            break;        
+        case 4:
+            txtPregunta.textContent = data[index].pregunta;
+            btnOpcionA.textContent = data[index].respuestaFalse2;
+            btnOpcionB.textContent = data[index].respuestaFalse1;
+            btnOpcionC.textContent = data[index].respuestaTrue;
+            btnOpcionD.textContent = data[index].respuestaFalse3;
+            break;    
+        default:
+            txtPregunta.textContent = data[index].pregunta;
+            btnOpcionA.textContent = data[index].respuestaFalse2;
+            btnOpcionB.textContent = data[index].respuestaFalse1;
+            btnOpcionC.textContent = data[index].respuestaFalse3;
+            btnOpcionD.textContent = data[index].respuestaTrue;
+            break;  
+    }
+ } 
+
+/**
+ * Permite cargar las preguntas y las respuestas,
+ * usamos el switch para cargar las respuestas aleatoriamente.
+ */
 function cargarPregunta(){
   
-    const index = Math.floor(Math.random()* (data.length-1 - 0 + 1));
+    const index = Math.floor(Math.random() * (data.length-1 - 0 + 1));
     localStorage.setItem('indexPregunta', index);
     
-         txtPregunta.textContent = data[index].pregunta;
-         btnOpcionA.textContent = data[index].respuestaFalse2;
-         btnOpcionB.textContent = data[index].respuestaFalse1;
-         btnOpcionC.textContent = data[index].respuestaTrue;
-         btnOpcionD.textContent = data[index].respuestaFalse3;
- 
+    cargarRespuestasTmp(index);
+    
 }
 
+/**
+ * Evento del boton A opcion de respueta
+ * validamos si es correcta o no, validamos si 
+ * llego al puntaje maximo que es 100 para declaralo ganador
+ */
 btnOpcionA.addEventListener('click',  (e) =>{
     if(validateAnswer(localStorage.getItem('indexPregunta'), btnOpcionA.textContent)){
         alert('Respuesta correcta!!!!');
         sumPuntaje();
-        if(validateWin()){
-            alert('Felicidades has ganado!!!');
-            finalizarJuego();
-        }
+        validateWin()
     }else{
         alert('Respuesta Incorrecta!!!!');
         finalizarJuego();
@@ -143,14 +198,16 @@ btnOpcionA.addEventListener('click',  (e) =>{
 
 });
 
+/**
+ * Evento del boton B opcion de respueta
+ * validamos si es correcta o no, validamos si 
+ * llego al puntaje maximo que es 100 para declaralo ganador
+ */
 btnOpcionB.addEventListener('click',  (e) =>{
     if(validateAnswer(localStorage.getItem('indexPregunta'), btnOpcionB.textContent)){
         alert('Respuesta correcta!!!!');
         sumPuntaje();
-        if(validateWin()){
-            alert('Felicidades has ganado!!!');
-            finalizarJuego();
-        }
+        validateWin()
     }else{
         alert('Respuesta Incorrecta!!!!');
         finalizarJuego();
@@ -158,14 +215,16 @@ btnOpcionB.addEventListener('click',  (e) =>{
 
 });
 
+/**
+ * Evento del boton C opcion de respueta
+ * validamos si es correcta o no, validamos si 
+ * llego al puntaje maximo que es 100 para declaralo ganador
+ */
 btnOpcionC.addEventListener('click',  (e) =>{
     if(validateAnswer(localStorage.getItem('indexPregunta'), btnOpcionC.textContent)){
         alert('Respuesta correcta!!!!');
         sumPuntaje();
-        if(validateWin()){
-            alert('Felicidades has ganado!!!');
-            finalizarJuego();
-        }
+        validateWin()
     }else{
         alert('Respuesta Incorrecta!!!!');
         finalizarJuego();
@@ -173,15 +232,20 @@ btnOpcionC.addEventListener('click',  (e) =>{
       
 });
 
-btnOpcionD.addEventListener('click',  (e) =>{
+/**
+ * Evento del boton D opcion de respueta
+ * validamos si es correcta o no, validamos si 
+ * llego al puntaje maximo que es 100 para declaralo ganador
+ */
+btnOpcionD.addEventListener('click',  async(e) =>{
    
     if(validateAnswer(localStorage.getItem('indexPregunta'), btnOpcionD.textContent)){
         alert('Respuesta correcta!!!!');
         sumPuntaje();
-        if(validateWin()){
-            alert('Felicidades has ganado!!!');
-            finalizarJuego();
-        }
+        validateWin()
+        
+           
+        
     }else{
         alert('Respuesta Incorrecta!!!!');
         finalizarJuego();
@@ -189,22 +253,40 @@ btnOpcionD.addEventListener('click',  (e) =>{
    
 });
 
+/**
+ * Evento del boton finalizar, direcciona 
+ * al index del sitio.
+ */
 btnFinalizar.addEventListener('click',  (e) =>{
-    localStorage.setItem('user', '');
+    
     window.location.href = "index.html";
    
 });
 
+/**
+ * Evento del boton reiniciar, guardamos en en localStorage el puntaje
+ * y recagamos la pagina.
+ */
 btnReiniciar.addEventListener('click',  (e) =>{
-    
+    localStorage.setItem(localStorage.getItem('user'), localStorage.getItem('puntajeTmp'));
     window.location.reload();
    
 });
 
+/**
+ * Validamos si la respuesta seleccionada es la correcta.
+ * 
+ * @param {*} indexPregunta index para buscar la pregunta dentro del arreglo
+ * @param {*} answer  respuesta seleccionada por el usuario
+ * @returns true o false si la respuesta fue correcta.
+ */
 const validateAnswer = (indexPregunta, answer) =>{
     return data[indexPregunta].respuestaTrue === answer;
 }
 
+/**
+ * Sumamos el puntaje si la pregunta fue correcta.
+ */
 const sumPuntaje = () =>{
     localStorage.setItem('puntajeTmp', parseInt(localStorage.getItem('puntajeTmp')) + 10);
     pPuntaje.textContent = "Su puntuación es: " + localStorage.getItem('puntajeTmp');
@@ -213,15 +295,29 @@ const sumPuntaje = () =>{
 
 }
 
-
+/**
+ * Finalizar juego cuando el usuario gana o pierde, se invoca este 
+ * metodo, se guarda el historial en el localStorange y se recarga
+ * la pagina.
+ */
 const finalizarJuego = () =>{
-    localStorage.setItem('puntajeTmp',0);
     pPuntaje.textContent = "Su puntuación es: " + localStorage.getItem('puntajeTmp');
+
+    localStorage.setItem(localStorage.getItem('user'), localStorage.getItem('puntajeTmp'));
+    window.location.reload();
 }
 
+/**
+ * validamos si ha llegado al puntaje maximo 
+ * 
+ * @returns true o false si hay un ganador
+ */
+const validateWin = () => new Promise(() =>{
 
-const validateWin = () =>{
-
-    return parseInt(localStorage.getItem('puntajeTmp')) === 100;
+    if( parseInt(localStorage.getItem('puntajeTmp')) === 100){
+        alert('Felicidades has ganado!!!');
+        finalizarJuego();
+    }
         
-}
+});
+
